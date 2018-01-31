@@ -71,9 +71,9 @@ class Location extends JPanel  implements ActionListener {
         visualize = new JButton("Visualize USD");
         visualize.addActionListener(e -> {
             XYLineChart_AWT chart = new XYLineChart_AWT("Currency");
-            chart.pack( );
-            RefineryUtilities.centerFrameOnScreen( chart );
-            chart.setVisible( true );
+            //chart.pack( );
+            //RefineryUtilities.centerFrameOnScreen( chart );
+            //chart.setVisible( true );
         });
         visualize.setAlignmentX( Component.CENTER_ALIGNMENT );
         add(visualize);

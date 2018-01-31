@@ -10,13 +10,13 @@ class ConnectToPostgres  {
     /*
      * DB configuration
      */
-    final String url = "jdbc:postgresql://127.0.0.1:5432/postgres";
-    final String user = "postgres";
-    final String password = "admin";
-    Connection connection = null;
+    final static String url = "jdbc:postgresql://127.0.0.1:5432/postgres";
+    final static String user = "postgres";
+    final static String password = "admin";
+    static Connection connection = null;
 
 
-    public void Connect(boolean notes) {
+    public static void Connect(boolean notes) {
 
         //Testing connection to database
         if(notes){System.out.println("-------- PostgreSQL "
