@@ -6,7 +6,6 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.ui.ApplicationFrame;
 
 import javax.swing.*;
@@ -29,14 +28,16 @@ class XYLineChart_AWT extends ApplicationFrame {
 
     public XYLineChart_AWT(String applicationTitle) {
         super(applicationTitle);
-        JFrame f = new JFrame("Chart22222");
+        JFrame f = new JFrame("Chart");
         JPanel p = new JPanel();
         JScrollPane s;
+        JCheckBox[] lista;
+        TimeSeriesCollection dataset = new TimeSeriesCollection();
         JFreeChart timelineChart = ChartFactory.createTimeSeriesChart(
                 "JG",
                 "Date",
                 "Value",
-                createDataset("usd")
+                dataset
         );
 
         ChartPanel chartPanel = new ChartPanel(timelineChart);
@@ -48,9 +49,23 @@ class XYLineChart_AWT extends ApplicationFrame {
         plot.setRenderer(renderer);
         setContentPane(chartPanel);
         try {
-            JCheckBox[] lista = whichToShow();
+            lista = whichToShow();
             for(int i=0; i<lista.length; i++){
                 p.add(lista[i]);
+                int finalI = i;
+                lista[i].addItemListener(e -> {
+                    if(lista[finalI].isSelected()==true){
+                        System.out.println(lista[finalI].getName());
+                        dataset.addSeries(newSeries(lista[finalI].getName()));
+                    }else if(lista[finalI].isSelected()==false){
+                        for (int v = 0; v < dataset.getSeriesCount(); v++) {
+                            String name = (String) dataset.getSeriesKey(v);
+                            if(name==lista[finalI].getName()){
+                                dataset.removeSeries(v);
+                            }
+                        }
+                    }
+                });
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,11 +81,11 @@ class XYLineChart_AWT extends ApplicationFrame {
         f.setVisible(true);
         f.setPreferredSize(new java.awt.Dimension(660, 467));
         f.pack();
-
     }
 
     private JCheckBox[] whichToShow() throws SQLException {
 
+        ConnectToPostgres.Connect(false);
         Statement r = ConnectToPostgres.connection.createStatement();
         ResultSet rss = r.executeQuery("SELECT table_name" +
                 "  FROM information_schema.tables" +
@@ -84,15 +99,14 @@ class XYLineChart_AWT extends ApplicationFrame {
         JCheckBox[] boxes = new JCheckBox[currencies.size()]; //  Each checkbox will get a name of food from food array.
         for(int i=0; i<boxes.length; i++){
             boxes[i] = new JCheckBox(currencies.get(i));
+            boxes[i].setName(currencies.get(i));
         }
         return boxes;
     }
 
-    private XYDataset createDataset(String name){
-        final TimeSeries usd = new TimeSeries(name);
-
+    private TimeSeries newSeries(String name){
+        final TimeSeries seria = new TimeSeries(name);
         ConnectToPostgres conect = new ConnectToPostgres();
-
         String select = "SELECT * FROM "+name;
         String select2 = "SELECT * FROM data";
         Statement statement = null, statement2=null;
@@ -114,13 +128,12 @@ class XYLineChart_AWT extends ApplicationFrame {
                     e.printStackTrace();
                 }
 
-                usd.add(new Day(data), wartosc);
+                seria.add(new Day(data), wartosc);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        final TimeSeriesCollection dataset = new TimeSeriesCollection();
-        dataset.addSeries(usd);
-        return dataset;
+        return seria;
     }
+
 }
