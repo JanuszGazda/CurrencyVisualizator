@@ -39,7 +39,7 @@ class Location extends JPanel  implements ActionListener {
         add(go);
 
         //downloading files with shorter name
-        dwnld = new JButton("Download");
+        dwnld = new JButton("     Download      ");
         dwnld.addActionListener(e -> {
             for (String aLink : link) {
                 out = new File(String.valueOf(chooser.getSelectedFile())
@@ -51,7 +51,7 @@ class Location extends JPanel  implements ActionListener {
         add(dwnld);
 
         //inserting downloaded files to DB
-        insertToDb = new JButton("Insert to DB");
+        insertToDb = new JButton("   Insert to DB    ");
         insertToDb.addActionListener(e -> {
             InsertDataToDb insert = new InsertDataToDb();
             try {
@@ -68,7 +68,7 @@ class Location extends JPanel  implements ActionListener {
         add(insertToDb);
 
         //visualizing data
-        visualize = new JButton("Visualize USD");
+        visualize = new JButton("  Visualize $$$  ");
         visualize.addActionListener(e -> {
             XYLineChart_AWT chart = new XYLineChart_AWT("Currency");
             //chart.pack( );

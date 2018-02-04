@@ -39,12 +39,12 @@ class InsertDataToDb {
         //inserting data to tables
         for (int k = 2; k < lines.size()-4; k++) {
             List<String> values = Arrays.asList(lines.get(k).split(";"));
-            for (int l = 0; l < names.size()-3; l++) {
-                String insertValues = "Insert into " + cutNames(names.get(l)) + " values('" +
-                        values.get(l).replace(",",".").replace("/", "_")+"')";
-                PreparedStatement statement = connection.connection.prepareStatement(insertValues);
-                int rowsAdded = statement.executeUpdate();
-            }
+                for (int l = 0; l < names.size() - 3; l++) {
+                    String insertValues = "Insert into " + cutNames(names.get(l)) + " values('" +
+                            values.get(l).replace(",", ".").replace("/", "_") + "')";
+                    PreparedStatement statement = connection.connection.prepareStatement(insertValues);
+                    int rowsAdded = statement.executeUpdate();
+                }
         }
         System.out.println("File " + file.getName() + " inserted to DB with "+(lines.size()-4)+" records and "+(names.size()-3)+" currencies");
         lines.clear();

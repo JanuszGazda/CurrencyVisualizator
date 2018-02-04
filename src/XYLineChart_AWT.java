@@ -48,6 +48,7 @@ class XYLineChart_AWT extends ApplicationFrame {
         renderer.setBaseShapesVisible(false);
         plot.setRenderer(renderer);
         setContentPane(chartPanel);
+        //adding checkboxes and their Listeners
         try {
             lista = whichToShow();
             for(int i=0; i<lista.length; i++){
@@ -55,13 +56,14 @@ class XYLineChart_AWT extends ApplicationFrame {
                 int finalI = i;
                 lista[i].addItemListener(e -> {
                     if(lista[finalI].isSelected()==true){
-                        System.out.println(lista[finalI].getName());
+                        System.out.println(lista[finalI].getName()+" added");
                         dataset.addSeries(newSeries(lista[finalI].getName()));
                     }else if(lista[finalI].isSelected()==false){
                         for (int v = 0; v < dataset.getSeriesCount(); v++) {
                             String name = (String) dataset.getSeriesKey(v);
                             if(name==lista[finalI].getName()){
                                 dataset.removeSeries(v);
+                                System.out.println(lista[finalI].getName()+" removed");
                             }
                         }
                     }
@@ -83,6 +85,7 @@ class XYLineChart_AWT extends ApplicationFrame {
         f.pack();
     }
 
+    //selects names of currencies for visualization
     private JCheckBox[] whichToShow() throws SQLException {
 
         ConnectToPostgres.Connect(false);
@@ -104,6 +107,7 @@ class XYLineChart_AWT extends ApplicationFrame {
         return boxes;
     }
 
+    //creates TimeSeries to display in plot
     private TimeSeries newSeries(String name){
         final TimeSeries seria = new TimeSeries(name);
         ConnectToPostgres conect = new ConnectToPostgres();
